@@ -36,12 +36,26 @@
 //   console.log("server is running on port 3000");
 // });
 
-const EventEmitter = require("events");
+// const EventEmitter = require("events");
 
-const customEmitter = new EventEmitter();
+// const customEmitter = new EventEmitter();
 
-customEmitter.on("response", () => {
-  console.log("data recevied");
+// customEmitter.on("response", () => {
+//   console.log("data recevied");
+// });
+
+// customEmitter.emit("response");
+
+// streams
+const { createReadStream } = require("fs");
+
+const stream = createReadStream("./rent/sec.txt", {
+  highWaterMark: 90000,
+  encoding: "utf-8",
 });
 
-customEmitter.emit("response");
+stream.on("data", (chunk) => {
+  console.log(chunk);
+});
+
+stream.on("error", (err) => console.log(err));
