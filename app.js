@@ -54,6 +54,22 @@ app.get("/api/products/:id", (req, res) => {
   res.json(product);
 });
 
+app.get("/api/query", (req, res) => {
+  const { search, limit } = req.query;
+  let sortedProducts = [...products];
+
+  if (search) {
+    sortedProducts = sortedProducts.filter((item) => {
+      const name = item.name.toLowerCase();
+      return name.includes(search.toLowerCase());
+    });
+  }
+  if (limit) {
+    sortedProducts = sortedProducts.slice(0, Number(limit));
+  }
+  res.status(200).json(sortedProducts);
+});
+
 app.all("/{*random}", (req, res) => {
   res.status(404).send("page not found");
 });
