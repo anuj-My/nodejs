@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/anuj-My/nodejs/issues"
   },
-  "homepage": "https://github.com/anuj-My/nodejs#readme"
+  "homepage": "https://github.com/anuj-My/nodejs#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
