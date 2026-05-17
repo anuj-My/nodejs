@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const { products } = require("./data.js");
 
 const app = express();
 
@@ -11,7 +12,7 @@ const app = express();
 // app.use  (middleware)
 // app.listen
 
-app.use(express.static(path.resolve(__dirname, "./navbar-app")));
+// app.use(express.static(path.resolve(__dirname, "./navbar-app")));
 
 // app.get("/", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "./navbar-app/index.html"));
@@ -29,6 +30,29 @@ app.use(express.static(path.resolve(__dirname, "./navbar-app")));
 // app.get("/browser-app.js", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "./navbar-app/browser-app.js"));
 // });
+
+app.get("/", (req, res) => {
+  res.send('<h1>Home Page</h1><a href="/api/products">products</a>');
+});
+
+app.get("/api/products", (req, res) => {
+  const newProducts = products.map((item) => {
+    const { id, name, price, category } = item;
+    return { id, name, price, category };
+  });
+  res.json(newProducts);
+});
+
+app.get("/api/products/:id", (req, res) => {
+  console.log(req.params.id);
+  const id = req.params.id;
+
+  const product = products.find((item) => item.id === Number(id));
+  if (!product) {
+    res.status(404).send("product not found");
+  }
+  res.json(product);
+});
 
 app.all("/{*random}", (req, res) => {
   res.status(404).send("page not found");
