@@ -31,7 +31,16 @@ const app = express();
 //   res.sendFile(path.resolve(__dirname, "./navbar-app/browser-app.js"));
 // });
 
-app.get("/", (req, res) => {
+// middleware
+const logger = (req, res, next) => {
+  const method = req.method;
+  const url = req.url;
+  const time = new Date().getFullYear();
+  console.log(method, url, time);
+  next();
+};
+
+app.get("/", logger, (req, res) => {
   res.send('<h1>Home Page</h1><a href="/api/products">products</a>');
 });
 
