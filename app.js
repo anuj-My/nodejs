@@ -32,6 +32,15 @@ const app = express();
 // });
 
 // middleware
+const authorize = (req, res, next) => {
+  const { user } = req.query;
+  if (user) {
+    req.user = { name: "jon", id: 1 };
+    next();
+  } else {
+    res.status(401).send("unAuthorize");
+  }
+};
 const logger = (req, res, next) => {
   const method = req.method;
   const url = req.url;
@@ -40,7 +49,9 @@ const logger = (req, res, next) => {
   next();
 };
 
-app.get("/", logger, (req, res) => {
+app.use([logger, authorize]);
+
+app.get("/", (req, res) => {
   res.send('<h1>Home Page</h1><a href="/api/products">products</a>');
 });
 
