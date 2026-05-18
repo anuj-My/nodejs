@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { products } = require("./data.js");
+const { products, people } = require("./data.js");
 
 const app = express();
 
@@ -13,6 +13,9 @@ const app = express();
 // app.listen
 
 // app.use(express.static(path.resolve(__dirname, "./navbar-app")));
+app.use(express.static(path.resolve(__dirname, "./methods-public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // app.get("/", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "./navbar-app/index.html"));
@@ -49,11 +52,11 @@ const logger = (req, res, next) => {
   next();
 };
 
-app.use([logger, authorize]);
+// app.use([logger, authorize]);
 
-app.get("/", (req, res) => {
-  res.send('<h1>Home Page</h1><a href="/api/products">products</a>');
-});
+// app.get("/", (req, res) => {
+//   res.send('<h1>Home Page</h1><a href="/api/products">products</a>');
+// });
 
 app.get("/api/products", (req, res) => {
   const newProducts = products.map((item) => {
@@ -88,6 +91,31 @@ app.get("/api/query", (req, res) => {
     sortedProducts = sortedProducts.slice(0, Number(limit));
   }
   res.status(200).json(sortedProducts);
+});
+
+// all http methods
+// get
+app.get("/api/people", (req, res) => {
+  res.status(200).json({ sucess: true, data: people });
+});
+
+app.post("/api/people", (req, res) => {
+  const { name } = req.body;
+  if (!name) {
+    return res
+      .status(400)
+      .json({ sucess: false, msg: "please provide name value" });
+  }
+  res.status(201).json({ sucess: true, person: name });
+});
+
+// post
+app.post("/login", (req, res) => {
+  const { name } = req.body;
+  if (name) {
+    res.status(200).send(`Welcome ${name}`);
+  }
+  res.status(401).send("Please provide name.");
 });
 
 app.all("/{*random}", (req, res) => {

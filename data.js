@@ -21,3 +21,11 @@ module.exports.products = [
     inStock: true,
   },
 ];
+
+module.exports.people = [
+  { id: 1, name: "Anuj" },
+  { id: 2, name: "Riya" },
+  { id: 3, name: "Amit" },
+  { id: 4, name: "Sneha" },
+  { id: 5, name: "Rahul" },
+];
